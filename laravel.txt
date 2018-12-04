@@ -1,0 +1,104 @@
+TEST LARAVEL
+
+Duration : 60 mins
+Object : Proving that the developer got a correct knowledge of the framework. Each step need to be done one after another.
+
+1)	Create a new git repository. Write proper commit for each features 
+       1. Go to https://github.com. And Register and login.
+       2.  Open github dashboard. And create new organization.
+       3. Click on New Repository And Define repository name and select owner.
+       4. Click on Create repository Button. 
+       5. Click on Import Code Button.
+      6. Any changes in file and commit file from command prompt or on github. 
+
+2)	Using composer get the last version of laravel 5 (2min)
+1.composer create-project laravel/laravel my_projectname 5.
+
+3)	Using bower, install the jquery library on your app (2min)
+   1. npm install -g bower
+       2.bower install jquery#1 bootstrap --save
+
+
+4)	Create using the Auth middleware and auto generated views an authentication system (5min)
+   1. php artisan make:middleware checkuser
+      2. Assigning Middleware Routes:  app/Http/Kernel.php
+      3. php artisan make:auth
+
+
+5)	Using migrations define 2 tables (Hotels and Comments) and create the appropriate Models. Defining the right relationships. Belongs, hasone, hasmany etc… (7 min)
+      1. php artisan make:migration create_hotels_table
+	2. php artisan make:migration create_comments_table
+	3. php artisan migrate
+4. php artisan make:model hotels
+5. php artisan make:model comments
+
+        6. DB::table('hotels')
+          ->rightJoin(comments, 'hotels.id','=', 'comments.h_id')
+          ->select('hotels.hname', 'comments.comments')
+          ->get();
+
+
+
+6)	On the /admin route, create the controller and views to be able to create an hotel. Important : this page is only accessible by the user with id = 1 (12 min)
+     1. php artisan make:controller HotelController --plain
+       2. php artisan make:view hotel
+       3.Route::get('user/{1}', 'hotelController@hotelview')
+
+        namespace App\Http\Controllers;
+use Illuminate\Http\Request;
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+
+class HotelController extends Controller {
+   
+        function hotelview(Request $request, $id){
+           if (Auth::id() == $id){
+         return view(‘hotel’);
+       }
+         }
+}
+
+
+
+
+7)	Create using Seeds a second user with id = 2 named “john” with password “doe”.  (2 min)
+
+use Illuminate\Database\Seeder;
+class UsersTableSeeder extends Seeder
+{
+/**
+    * Run the database seeds.
+      *
+       * @return void
+       */
+      public function run()
+      {
+          DB::table('users')->insert([
+'id'=>int(2),              
+'name' => string('john'),              
+'password' => bcrypt('doe')
+          ]);
+      }
+  }
+
+
+8)	On the front office page “/” you list all hotels. (2 min)
+       public function hotel()
+       {
+    	 $hotel = Hotel::get();
+         return view('hotel', [hotels => $hotel]);
+       }
+
+@foreach ($hotels as $i) 
+          <h3>{{ $i->hotel_name }}</h3>
+@endforeach
+
+
+9)	By clicking on an hotel you see all comments of this hotel. (2 min)
+
+10)	 If i’m logged in (not anonymous) with an user i’m able to post a comment (5 min)
+
+
+Combinated time : 42 min
+Max time allowed : 50 min
+
